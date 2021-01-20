@@ -1,0 +1,10 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+.header-admin {
+  display: flex;
+  justify-content: space-between;
+}
+
+body {
+  background: $gray-100;
+}

@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    php:
+        build: ./docker/php
+        volumes:
+            - .:${PROJECT_PATH_IN_DOCKER}
+            - ~/.cache/composer:/.cache/composer
+        working_dir: ${PROJECT_PATH_IN_DOCKER}
+        depends_on:
+            - mariadb
+    mariadb:
+        image: mariadb
+        volumes:
+            - db_data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+
+volumes:
+    db_data:
+        driver: local

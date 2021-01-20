@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+    <header class="header-admin">
+        <h1>Product list ({{ pagination.count }} in total)</h1>
+        <div class="header-admin-button">
+            <a href="{{ path('logout') }}" class="btn btn-outline-danger">Logout</a>
+        </div>
+    </header>
+
+
+    <section class="header-buttons">
+        <div class="mb-1">
+            <a class="btn btn-primary btn-create-product" href="{{ path('admin_product_new') }}">Create new product</a>
+        </div>
+        <a href="{{ path('home') }}">&larr; Back to home</a>
+    </section>
+
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Picture URL</th>
+            <th>Price</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in pagination %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>
+                    {{ product.pictureUrl }}
+                </td>
+                <td>{{ product.price }}</td>
+                <td>
+                    <a class="btn btn-link" href="{{ path('admin_product_edit', {'id': product.id}) }}">Edit</a>
+                    {% include'admin/product/_delete_form.html.twig' with {'product': product} only %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="navigation">
+        {{ pagerfanta(pagination) }}
+    </div>
+{% endblock %}

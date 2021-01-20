@@ -1,0 +1,26 @@
+{{ form_start(form) }}
+<div class="row">
+    <div class="col">
+        {{ form_row(form.name) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.pictureUrl) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.description) }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        {{ form_row(form.price) }}
+    </div>
+    <div class="col">
+        {{ form_row(form.category) }}
+    </div>
+</div>
+<button class="btn btn-primary">{{ button_label }}</button>
+{{ form_end(form) }}
+
+<a class="btn btn-link" href="{{ path('admin_product_index') }}">&larr; Back to list</a>

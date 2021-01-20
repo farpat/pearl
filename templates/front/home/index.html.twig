@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block body %}
+    <h1>Welcome!</h1>
+
+    <div class="list-group mt-4 menu">
+        <a href="{{ path('admin_product_index') }}" class="list-group-item list-group-item-action">
+            Product dashboard
+        </a>
+        <a href="{{ path('front_product_flow_first_comparator') }}" class="list-group-item list-group-item-action">
+            First comparator
+        </a>
+        <a href="{{ path('front_product_flow_second_comparator') }}" class="list-group-item list-group-item-action">
+            Second comparator
+        </a>
+    </div>
+{% endblock %}
