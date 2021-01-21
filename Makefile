@@ -42,13 +42,11 @@ help: ## Display this help
 dev: install ## Run development servers
 	@docker-compose -f docker-compose-dev.yaml up -d
 	@echo "Dev server launched on http://localhost:$(APP_PORT)"
-	@echo "Mail server launched on http://localhost:1080"
 	@echo "Webpack dev server launched on http://localhost:3000"
 
 stop-dev: ## Stop development servers
 	@docker-compose -f docker-compose-dev.yaml down
 	@echo "Dev server stopped: http://localhost:$(APP_PORT)"
-	@echo "Mail server stopped: http://localhost:1080"
 	@echo "Webpack dev server stopped: http://localhost:3000"
 
 build: install ## Build assets projects for production
