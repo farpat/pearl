@@ -14,7 +14,7 @@ Si vous n'avez pas ces utilitaires, vous pouvez ouvrir le fichier `Makefile` et 
 
 # Utilisation
 Pour lancer le projet et voir le résultat du projet : 
-- `make dev` (attention à la fin de ne pas oublier)
+- `make dev` (attention à la fin de ne pas oublier à lancer `make stop-dev` pour arrêter les conteneurs de développement)
 - Ouvrir http://localhost:8000 (le port 8000 peut être changé dans le .env)
 
 # Tests fonctionnels
