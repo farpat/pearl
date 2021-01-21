@@ -69,8 +69,8 @@ Encore
 //.autoProvidejQuery()
 
 
-if (!Encore.isProduction()) {
-  Encore.disableCssExtraction()
+if (Encore.isDevServer()) {
+  Encore.disableCssExtraction();
 }
 
 module.exports = Encore.getWebpackConfig()
