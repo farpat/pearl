@@ -28,9 +28,6 @@ composer = docker-compose -f docker-compose-dev.yaml run --rm php composer
 npm = docker-compose -f docker-compose-dev.yaml run --rm webpack_dev_server npm
 
 
-testing:
-	echo $(is_docker_compose_installed)
-
 node_modules: package.json
 	@$(npm) install
 
