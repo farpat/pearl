@@ -2,7 +2,6 @@
 
 namespace App\Tests\Front\Controller;
 
-use App\DataFixtures\ProductFixtures;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
@@ -21,12 +20,13 @@ class ProductFlowControllerTest extends WebTestCase
         $csvData = (new CsvEncoder())->decode($csvContentInString, 'csv');
         $products = self::$container->get(ProductRepository::class)->findAll();
         $this->assertCount(count($products), $csvData);
+        $i = 0;
         foreach ($products as $product) {
-            $key = $product->getId() - 1;
-            $this->assertEquals($product->getName(), $csvData[$key]['name']);
-            $this->assertEquals($product->getDescription(), $csvData[$key]['description']);
-            $this->assertEquals($product->getPictureUrl(), $csvData[$key]['picture_url']);
-            $this->assertEquals($product->getPrice(), $csvData[$key]['price']);
+            $this->assertEquals($product->getName(), $csvData[$i]['name']);
+            $this->assertEquals($product->getDescription(), $csvData[$i]['description']);
+            $this->assertEquals($product->getPictureUrl(), $csvData[$i]['picture_url']);
+            $this->assertEquals($product->getPrice(), $csvData[$i]['price']);
+            $i++;
         }
     }
 
@@ -40,14 +40,14 @@ class ProductFlowControllerTest extends WebTestCase
         $this->assertStringContainsString('text/csv', $response->headers->get('Content-Type'));
         $csvContentInString = $response->getContent();
         $csvData = (new CsvEncoder())->decode($csvContentInString, 'csv');
-        $products = self::$container->get(ProductRepository::class)->findProductGreatherThan();
+        $products = self::$container->get(ProductRepository::class)->findProductGreatherThan(20);
         $this->assertCount(count($products), $csvData);
         $i = 0;
         foreach ($products as $product) {
             $this->assertEquals($product->getName(), $csvData[$i]['name']);
-            $this->assertEquals($product->getDescription(), $csvData[$i]['description']);
             $this->assertEquals($product->getPictureUrl(), $csvData[$i]['picture_url']);
             $this->assertEquals($product->getPrice(), $csvData[$i]['price']);
+            $this->assertEquals($product->getCategory()->getName(), $csvData[$i]['category_name']);
             $i++;
         }
     }
