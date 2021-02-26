@@ -29,14 +29,14 @@ services:
             - db_data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: secret
-    webpack_dev_server:
+    asset_dev_server:
         image: node
         volumes:
             - .:${PROJECT_PATH_IN_DOCKER}
         working_dir: ${PROJECT_PATH_IN_DOCKER}
         ports:
             - 3000:3000
-        command: "./node_modules/.bin/encore dev-server --hot --host 0.0.0.0 --port 3000"
+        command: "npx vite --port 3000 --config assets/build/vite.config.js --host 0.0.0.0"
 
 volumes:
     db_data:

@@ -25,7 +25,7 @@ php_test = docker-compose -f docker-compose-test.yaml exec php php
 php = docker-compose -f docker-compose-dev.yaml run --rm php php
 bash = docker-compose -f docker-compose-dev.yaml run --rm php bash
 composer = docker-compose -f docker-compose-dev.yaml run --rm php composer
-npm = docker-compose -f docker-compose-dev.yaml run --rm webpack_dev_server npm
+npm = docker-compose -f docker-compose-dev.yaml run --rm asset_dev_server npm
 
 
 node_modules: package.json
@@ -35,19 +35,24 @@ vendor: composer.json
 	@$(composer) install
 
 install: vendor node_modules ## Install the composer dependencies and npm dependencies
+	@echo "$(PRIMARY_COLOR)Migrating database...$(NO_COLOR)"
+	@$(php) bin/console doctrine:database:drop --force --if-exists
+	@$(php) bin/console doctrine:database:create
+	@$(php) bin/console doctrine:migrations:migrate --no-interaction --quiet
+	@$(php) bin/console doctrine:fixtures:load --no-interaction --no-debug
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-15s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
 
-dev: install ## Run development servers
+dev: ## Run development servers
 	@docker-compose -f docker-compose-dev.yaml up -d
 	@echo "Dev server launched on http://localhost:$(APP_PORT)"
-	@echo "Webpack dev server launched on http://localhost:3000"
+	@echo "Asset dev server launched on http://localhost:3000"
 
 stop-dev: ## Stop development servers
 	@docker-compose -f docker-compose-dev.yaml down
 	@echo "Dev server stopped: http://localhost:$(APP_PORT)"
-	@echo "Webpack dev server stopped: http://localhost:3000"
+	@echo "Asset dev server stopped: http://localhost:3000"
 
 build: install ## Build assets projects for production
 	@rm -rf ./public/build/*
