@@ -3,52 +3,57 @@
 namespace App\Service\Asset;
 
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-
 class ViteAsset implements AssetInterface
 {
-    private ParameterBagInterface $parameterBag;
-    private int                   $assetDevServerPort;
-    private ?array                $manifestJson;
+    private string $manifestJsonPath;
+    private bool   $isLegacyBrowser;
+    private int    $assetDevServerPort;
+    private ?array $manifestJson;
 
-    public function __construct(ParameterBagInterface $parameterBag, int $assetDevServerPort)
-    {
-        $this->parameterBag = $parameterBag;
+    public function __construct(
+        string $manifestJsonPath,
+        bool $isLegacyBrowser,
+        int $assetDevServerPort
+    ) {
         $this->assetDevServerPort = $assetDevServerPort;
         $this->manifestJson = null;
+        $this->isLegacyBrowser = $isLegacyBrowser;
+        $this->manifestJsonPath = $manifestJsonPath;
     }
 
     public function renderAsset(string $asset): string
     {
-        $manifestPath = $this->parameterBag->get('kernel.project_dir') . '/public/assets/manifest.json';
-
-        if (file_exists($manifestPath)) {
+        if (file_exists($this->manifestJsonPath)) {
             if ($this->manifestJson === null) {
-                $this->manifestJson = json_decode(file_get_contents($manifestPath), true);
+                $this->manifestJson = json_decode(file_get_contents($this->manifestJsonPath), true);
             }
 
-            $asset = trim($asset, '/');
-            $data = $this->manifestJson['js/' . $asset] ?? null;
+            $key = $this->isLegacyBrowser ?
+                'js/' . str_replace('.js', '-legacy.js', $asset) :
+                'js/' . $asset;
+
+            $data = $this->manifestJson[$key] ?? null;
             if ($data === null) {
                 return '';
             }
             $jsFile = $data['file'];
             $cssFiles = $data['css'] ?? [];
 
-            $html = "<script src=\"/assets/{$jsFile}\" type=\"module\" defer></script>";
+            $html = $this->isLegacyBrowser ?
+                "<script src=\"/assets/{$jsFile}\" nomodule defer></script>" :
+                "<script src=\"/assets/{$jsFile}\" type=\"module\" defer></script>";
+
             foreach ($cssFiles as $css) {
                 $html .= "<link rel=\"stylesheet\" href=\"/assets/{$css}\" media=\"screen\"/>";
             }
 
             return $html;
         } else {
-            $base = "http://localhost:{$this->assetDevServerPort}/assets/js";
-
-            dump($base . '/' . $asset);
+            $base = "http://localhost:{$this->assetDevServerPort}/assets";
 
             return <<<HTML
 <script type="module" src="{$base}/@vite/client"></script>
-<script src="{$base}/{$asset}" type="module" defer></script>
+<script src="{$base}/js/{$asset}" type="module" defer></script>
 HTML;
         }
     }

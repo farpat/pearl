@@ -8,7 +8,9 @@ import dynamicImportVariables from '@rollup/plugin-dynamic-import-vars';
 export default defineConfig({
     plugins: [
         liveReload(config.refresh.map(path => '../' + path)),
-        legacy({targets: ['defaults', 'not IE 11']}),
+        legacy({
+            targets: ['defaults', 'not IE 11'],
+        }),
     ],
     root: './assets',
     base: '/assets/',
