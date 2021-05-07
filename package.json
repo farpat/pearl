@@ -6,6 +6,7 @@
         "build": "vite build --config assets/build/vite.config.js"
     },
     "dependencies": {
+        "@rollup/plugin-dynamic-import-vars": "^1.1.1",
         "@vitejs/plugin-legacy": "^1.3.3",
         "bootstrap": "^5.0.0",
         "choices.js": "^9.0.1",

@@ -2,18 +2,18 @@
 
 namespace App\Twig;
 
+use App\Service\Asset\AssetInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AssetExtension extends AbstractExtension
 {
-    private ParameterBagInterface $parameterBag;
-    private ?array                $manifestJson = null;
+    private AssetInterface        $asset;
 
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(AssetInterface $asset)
     {
-        $this->parameterBag = $parameterBag;
+        $this->asset = $asset;
     }
 
     public function getFunctions(): array
@@ -23,41 +23,8 @@ class AssetExtension extends AbstractExtension
         ];
     }
 
-    public function renderAsset(string $asset)
+    public function renderAsset(string $asset): string
     {
-        $manifestPath = $this->parameterBag->get('kernel.project_dir') . '/public/assets/manifest.json';
-        $hasManifestPath = file_exists($manifestPath);
-
-        if ($hasManifestPath) {
-            if ($this->manifestJson === null) {
-                $this->manifestJson = json_decode(file_get_contents($manifestPath), true);
-            }
-
-            $asset = trim($asset, '/');
-            $data = $this->manifestJson[$asset] ?? null;
-            if ($data === null) {
-                return '';
-            }
-            $jsFile = $data['file'];
-            $cssFiles = $data['css'] ?? [];
-
-            $html = <<<HTML
-          <script src="/assets/{$jsFile}" type="module" defer></script>
-HTML;
-            foreach ($cssFiles as $css) {
-                $html .= <<<HTML
-              <link rel="stylesheet" href="/assets/{$css}" media="screen"/>
-            HTML;
-            }
-
-            return $html;
-        } else {
-            $base = 'http://localhost:3000/assets';
-
-            return <<<HTML
-<script type="module" src="{$base}/@vite/client"></script>
-<script src="{$base}{$asset}" type="module" defer></script>
-HTML;
-        }
+        return $this->asset->renderAsset($asset);
     }
 }
