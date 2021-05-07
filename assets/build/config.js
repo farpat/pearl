@@ -1,7 +1,8 @@
 export default {
-  entry: {
-    'app.js': 'assets/js/app.js'
-  },
-  output: 'public/assets',
-  refresh: ['templates/**/*.twig'],
-}
+    entry: {
+        'front.js': 'assets/js/front.js',
+        'admin.js': 'assets/js/admin.js',
+    },
+    output: 'public/assets',
+    refresh: ['templates/**/*.twig'],
+};

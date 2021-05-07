@@ -1,6 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
 {% block title %}Edit Product{% endblock %}
+
+{% block script_to_load %}product-form.js{% endblock %}
 
 {% block body %}
     <h1>Edit Product << {{ product.name }} >></h1>

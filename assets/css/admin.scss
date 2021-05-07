@@ -1,10 +1,10 @@
 @import "./node_modules/bootstrap/scss/bootstrap.scss";
 
+body {
+  background: $red-100;
+}
+
 .header-admin {
   display: flex;
   justify-content: space-between;
-}
-
-body {
-  background: $gray-100;
 }

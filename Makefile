@@ -34,12 +34,16 @@ node_modules: package.json
 vendor: composer.json
 	@$(composer) install
 
-install: vendor node_modules ## Install the composer dependencies and npm dependencies
+install: vendor node_modules ## Install the composer dependencies, npm dependencies, and setup project
 	@echo "$(PRIMARY_COLOR)Migrating database...$(NO_COLOR)"
 	@$(php) bin/console doctrine:database:drop --force --if-exists
 	@$(php) bin/console doctrine:database:create
 	@$(php) bin/console doctrine:migrations:migrate --no-interaction --quiet
 	@$(php) bin/console doctrine:fixtures:load --no-interaction --no-debug
+
+update:
+	@$(npm) install
+	@$(composer) update
 
 help: ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; } /^[a-zA-Z_-]+:.*?##/ { printf "$(PRIMARY_COLOR_BOLD)%-15s$(NO_COLOR) %s\n", $$1, $$2 }' $(MAKEFILE_LIST) | sort
@@ -54,8 +58,8 @@ stop-dev: ## Stop development servers
 	@echo "Dev server stopped: http://localhost:$(APP_PORT)"
 	@echo "Asset dev server stopped: http://localhost:3000"
 
-build: install ## Build assets projects for production
-	@rm -rf ./public/build/*
+build: ## Build assets projects for production
+	@rm -rf ./public/assets/*
 	@$(npm) run build
 
 bash: ## Run bash in PHP container

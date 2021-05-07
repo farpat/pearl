@@ -1,15 +1,9 @@
 # Introduction
 Ce projet est la réponse au test " Application de gestion et distribution d'informations produits ".
 
-# Pré-requis 
-Pour installer le projet vous devez :
-- avoir `docker-compose`
-- avoir `make`
-
-Si vous n'avez pas ces utilitaires, vous pouvez ouvrir le fichier `Makefile` et reproduire à la main les instructions qui sont à l'intérieur.
-
 # Installation
 - `git clone git@github.com:farpat/pearl`
+- `cd pearl`
 - `make install`
 
 # Utilisation

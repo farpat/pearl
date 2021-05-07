@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class SecondProductNormalizer implements NormalizerInterface, CacheableSupportsMethodInterface
 {
-    private $normalizer;
+    private ObjectNormalizer $normalizer;
 
     public function __construct(ObjectNormalizer $normalizer)
     {
@@ -31,7 +31,7 @@ class SecondProductNormalizer implements NormalizerInterface, CacheableSupportsM
 
     public function supportsNormalization($data, $format = null): bool
     {
-        return $data instanceof \App\Entity\Product && $format === 'second-normalizer';
+        return $data instanceof Product && $format === 'second-normalizer';
     }
 
     public function hasCacheableSupportsMethod(): bool
