@@ -1,5 +1,10 @@
 @import "./node_modules/bootstrap/scss/bootstrap.scss";
 
 body {
-  background: $gray-100;
+  background-color: $gray-100;
+  background-image: url('../images/large picture.jpg');
+}
+
+.list-group-item {
+  background-image: url('../images/narrow picture.png');
 }
