@@ -31,15 +31,15 @@ class AssetFactory
     {
         $userAgent = $this->request->headers->get('User-Agent');
 
-        if (strpos('MSIE', $userAgent) !== false) {
+        if (strpos($userAgent, 'MSIE') !== false) {
             return true;
         }
 
-        if (strpos('Windows NT', $userAgent) !== false) {
+        if (strpos($userAgent, 'Windows NT') !== false) {
             return true;
         }
 
-        if (strpos('Internet Explorer', $userAgent) !== false) {
+        if (strpos($userAgent, 'Internet Explorer') !== false) {
             return true;
         }
 

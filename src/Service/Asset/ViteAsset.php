@@ -28,16 +28,18 @@ class ViteAsset implements AssetInterface
                 $this->manifestJson = json_decode(file_get_contents($this->manifestJsonPath), true);
             }
 
-            $key = $this->isLegacyBrowser ?
-                'js/' . str_replace('.js', '-legacy.js', $asset) :
-                'js/' . $asset;
+            $key = 'js/' . $asset;
 
-            $data = $this->manifestJson[$key] ?? null;
+            $legacyKey = $this->isLegacyBrowser ?
+                'js/' . str_replace('.js', '-legacy.js', $asset) :
+                null;
+
+            $data = $this->manifestJson[$legacyKey ?? $key] ?? null;
             if ($data === null) {
                 return '';
             }
             $jsFile = $data['file'];
-            $cssFiles = $data['css'] ?? [];
+            $cssFiles = $this->manifestJson[$key]['css'] ?? [];
 
             $html = $this->isLegacyBrowser ?
                 "<script src=\"/assets/{$jsFile}\" nomodule defer></script>" :
