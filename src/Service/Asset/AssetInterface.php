@@ -2,16 +2,20 @@
 
 namespace App\Service\Asset;
 
-
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-
 interface AssetInterface
 {
-    public function __construct(
-        string $manifestJsonPath,
-        bool $isLegacyBrowser,
-        int $assetDevServerPort
-    );
+    /**
+     * AssetInterface constructor.
+     * @param string $manifestJsonPath Chemin vers le fichier " manifest.json "
+     * @param bool $isLegacyBrowser Indique si la requête courante provient d'un navigateur " legacy " ou non
+     * @param int $assetDevServerPort Port du serveur de rendu d'asset (utile uniquement en mode développement)
+     */
+    public function __construct(string $manifestJsonPath, bool $isLegacyBrowser, int $assetDevServerPort);
 
-    public function renderAsset(string $asset): string;
+    /**
+     * Rend une balise HTML à partir d'une entrée (<link> ou <script>)
+     * @param string $entry
+     * @return string
+     */
+    public function renderAsset(string $entry): string;
 }

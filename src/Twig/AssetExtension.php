@@ -3,13 +3,12 @@
 namespace App\Twig;
 
 use App\Service\Asset\AssetInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 class AssetExtension extends AbstractExtension
 {
-    private AssetInterface        $asset;
+    private AssetInterface $asset;
 
     public function __construct(AssetInterface $asset)
     {
@@ -23,8 +22,8 @@ class AssetExtension extends AbstractExtension
         ];
     }
 
-    public function renderAsset(string $asset): string
+    public function renderAsset(string $entry): string
     {
-        return $this->asset->renderAsset($asset);
+        return $this->asset->renderAsset($entry);
     }
 }
