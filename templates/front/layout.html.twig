@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block assets %}
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-                integrity="sha384-vtXRMe3mGCbOeY7l30aIg8H9p3GdeSe4IFlP6G8JMa7o7lXvnz3GFKzPxzJdPfGK"
-                crossorigin="anonymous" defer></script>
-        {{ render_assets('front.js') }}
+        {{ render_assets('front.js', ['dependencies' => ['jquery']]) }}
     {% endblock %}
 </head>
 <body>

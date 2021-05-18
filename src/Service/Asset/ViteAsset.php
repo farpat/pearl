@@ -20,7 +20,7 @@ class ViteAsset implements AssetInterface
     /**
      * @throws AssetException
      */
-    public function renderAsset(string $entry): string
+    public function renderAsset(string $entry, array $dependencies = []): string
     {
         if (file_exists($this->manifestJsonPath)) {
             if ($this->manifestJson === null) {
@@ -29,7 +29,11 @@ class ViteAsset implements AssetInterface
 
             ['script' => $script, 'cssFiles' => $cssFiles, 'importFiles' => $importFiles] = $this->getData($entry);
 
-            $html = $this->renderProductionScript($script);
+            $html = '';
+            foreach ($dependencies as $dependency) {
+                $html .= $dependency;
+            }
+            $html .= $this->renderProductionScript($script);
             $html .= $this->renderProductionStyles($cssFiles);
             $html .= $this->renderProductionImports($importFiles);
 

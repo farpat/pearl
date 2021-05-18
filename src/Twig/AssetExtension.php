@@ -22,8 +22,8 @@ class AssetExtension extends AbstractExtension
         ];
     }
 
-    public function renderAsset(string $entry): string
+    public function renderAsset(string $entry, array $dependencies): string
     {
-        return $this->asset->renderAsset($entry);
+        return $this->asset->renderAsset($entry, $dependencies);
     }
 }
