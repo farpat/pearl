@@ -29,6 +29,10 @@ class AssetFactory
 
     private function isLegacyBrowser(): bool
     {
+        if ($this->request === null) {
+            return false;
+        }
+
         $userAgent = $this->request->headers->get('User-Agent');
 
         if (strpos($userAgent, 'MSIE') !== false) {
