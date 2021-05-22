@@ -31,7 +31,7 @@ class ViteAsset implements AssetInterface
 
             $html = '';
             foreach ($dependencies as $dependency) {
-                $html .= $dependency;
+                $html .= AssetInterface::DEPENDENCIES[$dependency] ?? '';
             }
             $html .= $this->renderProductionScript($script);
             $html .= $this->renderProductionStyles($cssFiles);
