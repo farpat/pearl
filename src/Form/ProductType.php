@@ -41,12 +41,12 @@ class ProductType extends AbstractType
                 ]
             ])
             ->add('pictureUrl', UrlType::class, [
-                'help'        => 'Enter an url with protocol <<https>>',
+                'help'        => 'Enter an url with protocol "https"',
                 'constraints' => [
                     new NotBlank(),
                     new Url([
                         'protocols' => ['https'],
-                        'message'   => 'You must enter an url with protocol <<https>>'
+                        'message'   => 'You must enter an url with protocol "https"'
                     ])
                 ]
             ])
