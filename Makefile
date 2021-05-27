@@ -59,7 +59,7 @@ stop-dev: ## Stop development servers
 	@echo "Asset dev server stopped: http://localhost:3000"
 
 build: ## Build assets projects for production
-	@rm -rf ./public/assets/*.{css,js,jpg,png,json}
+	@rm -rf ./public/assets/*
 	@$(npm) run build
 
 bash: ## Run bash in PHP container

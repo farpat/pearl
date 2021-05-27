@@ -27,15 +27,21 @@ class ViteAsset implements AssetInterface
                 $this->manifestJson = json_decode(file_get_contents($this->manifestJsonPath), true);
             }
 
-            ['script' => $script, 'cssFiles' => $cssFiles, 'importFiles' => $importFiles] = $this->getData($entry);
+            [
+                'script' => $script,
+                'cssFiles' => $cssFiles,
+                'importFiles' => $importFiles,
+                'polyfillFile' => $polyfillFile
+            ] = $this->getData($entry);
 
             $html = '';
             foreach ($dependencies as $dependency) {
                 $html .= AssetInterface::DEPENDENCIES[$dependency] ?? '';
             }
-            $html .= $this->renderProductionScript($script);
-            $html .= $this->renderProductionStyles($cssFiles);
+
             $html .= $this->renderProductionImports($importFiles);
+            $html .= $this->renderProductionScript($script, $polyfillFile);
+            $html .= $this->renderProductionStyles($cssFiles);
 
             return $html;
         }
@@ -44,33 +50,38 @@ class ViteAsset implements AssetInterface
     }
 
     /**
-     * @return array{script: string, cssFiles: string[], importFiles: string[]}
+     * @return array{script: string, cssFiles: string[], importFiles: string[], polyfillFile: ?string}
      * @throws AssetException
      */
     private function getData(string $asset): array
     {
-        $key = 'js/' . $asset;
-
-        $legacyKey = $this->isLegacyBrowser ?
+        $key = $this->isLegacyBrowser ?
             'js/' . str_replace('.js', '-legacy.js', $asset) :
-            null;
+            'js/' . $asset;
 
-        $data = $this->manifestJson[$legacyKey ?? $key] ?? null;
+        $data = $this->manifestJson[$key] ?? null;
         if ($data === null) {
-            throw new AssetException("L'entrée << $key (ou $legacyKey) >> n'existe pas !");
+            throw new AssetException("L'entrée << $key >> n'existe pas !");
+        }
+
+        $imports = [];
+        foreach($data['imports'] ?? [] as $importKey) {
+            $imports[] = $this->manifestJson[$importKey]['file'];
         }
 
         return [
             'script'      => $data['file'],
-            'cssFiles'    => $this->manifestJson[$key]['css'] ?? [],
-            'importFiles' => $data['imports'] ?? []
+            'cssFiles'    => $data['css'] ?? [],
+            'importFiles' => $imports,
+            'polyfillFile' => $this->isLegacyBrowser ? $this->manifestJson['../vite/legacy-polyfills']['file'] : null,
         ];
     }
 
-    private function renderProductionScript(string $file): string
+    private function renderProductionScript(string $file, ?string $polyfillFile): string
     {
-        return $this->isLegacyBrowser ?
-            "<script src=\"/assets/{$file}\" nomodule defer></script>" :
+        return $polyfillFile ?
+            "<script src=\"/assets/{$polyfillFile}\"></script>" .
+            "<script type=\"systemjs-module\" src=\"/assets/{$file}\" defer></script>" :
             "<script src=\"/assets/{$file}\" type=\"module\" defer></script>";
     }
 

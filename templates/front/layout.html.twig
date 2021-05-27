@@ -7,7 +7,9 @@
         {{ render_assets('front.js', ['jquery']) }}
     {% endblock %}
 </head>
-<body>
+<body
+        data-script-to-load="{% block script_to_load %}{% endblock %}"
+>
 <div class="container py-4">
     {% block body %}{% endblock %}
 </div>

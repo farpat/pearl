@@ -3,11 +3,13 @@
 {% block title %}Welcome!{% endblock %}
 
 {% block assets %}
-    <script defer>
+    <script>
         console.log('script inline');
     </script>
     {{ parent() }}
 {% endblock %}
+
+{% block script_to_load %}home-index{% endblock %}
 
 {% block body %}
     <h1>Welcome!</h1>
