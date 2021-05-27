@@ -98,7 +98,7 @@ class ViteAsset implements AssetInterface
 
         return <<<HTML
 <script type="module" src="{$base}/@vite/client"></script>
-<script src="{$base}/js/{$file}" type="module" defer></script>
+<script src="{$base}/js/{$file}" type="module"></script>
 HTML;
     }
 }
